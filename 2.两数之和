@@ -5,7 +5,7 @@
 #链接：https://leetcode-cn.com/explore/featured/card/top-interview-questions-easy/1/array/29/
 
 #解题思路：以数组某个数开始，寻找数组元素等于目标值与该数的差值，找到后返回。
-          知识点：  1.学习多重循环跳出的方法  设置标识符来跳出 
+          知识点：  1.学习多重循环跳出的方法  利用break 以及设置标识符来跳出 
                     2.多重循环的两种遍历方法  i 0--max   
                                             j i+1--max     好处：不会重复使用单个数字
 python代码：
