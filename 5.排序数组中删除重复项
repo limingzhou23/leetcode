@@ -1,0 +1,53 @@
+#给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+#不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
+例子：
+给定数组 nums = [1,1,2], 
+函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。 
+你不需要考虑数组中超出新长度后面的元素，只用判断所需长度内的元素是不是原数组不重复元素
+#力扣网 https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/1/array/21/
+
+#解题思路：由于是原地删除，所以不能新增数组用以备份，还是使用双指针方式，慢指针指向已有元素，快指针寻找新元素，一旦找到新元素
+         （由于数组已经排序好了，因此新元素就是和慢指针指向元素不同的元素），就储存在慢指针指向的下一个位置，继续以此元素来筛选后续元素
+知识点：1.快慢指针的经典操作
+       2.变量赋值方法---->可以用表达式来赋值0/1
+       
+
+
+
+python 代码：
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        slow=0
+        length=len(nums)!=0
+        for fast in range(0,len(nums)):
+            if(nums[slow]!=nums[fast]):
+                slow+=1
+                nums[slow]=nums[fast]
+                length+=1
+        return length
+        
+        
+        
+        
+ C++代码    
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums)
+    {
+        int slow=0;
+        int size=(nums.size()!=0);
+    for (int fast = 0; fast < nums.size();fast++)
+    {
+      if(nums[slow]!=nums[fast]){
+           slow++;
+           nums[slow]=nums[fast];
+           size++;
+      }
+    }
+    return size;
+    }
+};       
