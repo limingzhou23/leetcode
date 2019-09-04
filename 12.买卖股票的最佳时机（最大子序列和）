@@ -1,0 +1,58 @@
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。
+注意你不能在买入股票前卖出股票。
+力扣 https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/23/dynamic-programming/55/
+解题思路：本题目实质上是求差价的最大子序列和，最后与0（不交易）进行比较，因此仅分析如何求最大子序列和
+          使用分治法：最大的子序列有三种 1.在序列左一半
+                                      2.在序列右一半
+                                      3.跨过序列中间
+                     前两种无需分析，第三种需要找到具体大小，实际上就是从序列开始就累加，一旦得到负值就舍弃这几个，直到得到左一半靠边的最大值
+                     同样方法得到右边靠边最大值，相加可得跨中间的最大值
+                     最大子序列即这三个中的最大值
+ 知识点：1.分治法
+        2.递归调用
+        3.要熟悉程序的错误控制，准确掌握特殊情况
+
+python 实现：
+import numpy as np
+def maxsub(nums):
+    length=len(nums)
+    max3_1=0
+    max3_2=0
+    
+    if(length==0):
+        return 0
+    elif(length==1):
+        return nums[0]
+    else:
+        max1=maxsub(nums[0:length//2])
+        max2=maxsub(nums[length//2:length])
+        for i in range(0,length//2):
+            max3_1+=nums[i]
+            if((max3_1<0)and(i!=length//2-1)):
+                max3_1=0
+        for j in range(length-1,length//2-1,-1):
+            max3_2+=nums[j]
+            if((max3_2<0)and(j!=length//2)):
+                max3_2=0
+        max3=max3_1+max3_2
+        maxnum=max(max1,max2,max3)
+        return maxnum
+            
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        dislong=len(prices)-1
+        if(dislong<=0):
+            return 0
+        else:
+            nums=np.zeros(dislong,dtype=int)
+            for i in range(0,len(nums)):
+                nums[i]=prices[i+1]-prices[i]
+            q=max(maxsub(nums),0)
+        
+            return q
+        
