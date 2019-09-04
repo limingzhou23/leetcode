@@ -1,0 +1,74 @@
+你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。
+这个地方所有的房屋都围成一圈，这意味着第一个房屋和最后一个房屋是紧挨着的。
+同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/house-robber-ii/
+
+解题思路：打家劫舍的升级版本 围成一个圈后 子问题分割成这样：1.第一个屋子去  第二个和最后一个不去 剩下的和之前的问题一样
+                                                       2.去最后一个屋子 第一个和倒数第二个不去  剩下的一样
+                                                       3.第一个 最后一个都不去 剩下和之前一样
+                                                       对比这几个的收益
+ 警示：该题仅仅是一个改变 却做了快一个小时，主要是划分子问题能力弱，要多做题，多思考
+       像这个题，既然是首尾互联，其他的都一样，就要考虑怎么化到之前的问题
+知识点：数组索引下标
+
+
+python实现：
+import numpy as np
+def maxmoney(list,nums):
+    length=len(list)
+    if(length==0):
+        return 0
+    elif(nums[length]>0):
+        return nums[length]
+    elif(length==1):
+        nums[1]=list[0]
+        return nums[1]
+    elif(length==2):
+        nums[2]=max(list[0],list[1])
+        return nums[2]
+    elif(length==3):
+        nums[3]=max(list[0]+list[2],list[1])
+        return nums[3]
+    else:
+        max2=list[-2]+maxmoney(list[0:length-3],nums)
+        max1=list[-1]+maxmoney(list[0:length-2],nums)
+        nums[length]=max(max1,max2)
+        return nums[length]
+    
+class Solution(object):
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if(len(nums)==0):
+            return 0
+        elif(len(nums)==3):
+            return max(nums[0],nums[1],nums[2])
+        else:
+            realnums1=nums[2:-1]
+            length1=len(realnums1)+1
+            remo1=np.zeros(length1,dtype=int)
+            for i in range(0,length1):
+                remo1[i]=-1
+            q1=maxmoney(realnums1,remo1)+nums[0]
+        
+            realnums2=nums[1:-2]
+            length2=len(realnums2)+1
+            remo2=np.zeros(length2,dtype=int)
+            for i in range(0,length2):
+                remo2[i]=-1
+            q2=maxmoney(realnums2,remo2)+nums[-1]
+            
+            realnums3=nums[1:-1]
+            length3=len(realnums3)+1
+            remo3=np.zeros(length3,dtype=int)
+            for i in range(0,length3):
+                remo3[i]=-1
+            q3=maxmoney(realnums3,remo3)
+            
+            q=max(q1,q2,q3)
+            return q
