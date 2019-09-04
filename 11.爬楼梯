@@ -1,0 +1,50 @@
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+注意：给定 n 是一个正整数。
+力扣 https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/23/dynamic-programming/54/
+解题思路：动态规划问题 爬n层楼梯的子问题是先爬 1 层 再爬n-i层，或者先怕两层，再爬n-2层，为这两个答案的和
+                     问题分解，使用递归方法
+ 知识点：1.函数递归的方法
+        2.带备忘的自顶而下或者自底向上方法来优化时间
+        3.注意数组初始化时的格式                   
+                     
+                     
+                     
+                     
+python实现
+
+import numpy as np
+ 
+def step_nums_anwser(n,step_nums):
+    if(step_nums[n-1]>=0):
+        return step_nums[n-1]
+        
+    if(n==0):
+        step_total=0
+    elif(n==1):
+        step_total=1
+    elif(n==2):
+        step_total=2
+    else:
+        step_total=-10
+        for i in range(0,n):
+            step_total=step_nums_anwser(n-1,step_nums)+step_nums_anwser(n-2,step_nums)
+        step_nums[n-1]=step_total
+    return step_total
+
+
+class Solution(object):
+
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        step_total=-1
+        step_nums=np.zeros(n,dtype=int)
+        for i in range(len(step_nums)):
+            step_nums[i]=-10
+            
+        q=step_nums_anwser(n,step_nums)
+        return q
+    
