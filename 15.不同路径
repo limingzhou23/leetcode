@@ -1,0 +1,46 @@
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+问总共有多少条不同的路径
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/unique-paths
+
+解题思路：经典动态规划 子问题：到达m,n的总路径数为到达该格子上方和左方总路径之和，因此需要制作矩阵存储每个格子的路径数目。
+知识点：1.动态规划
+       2.python 二维数组生成
+
+python实现：
+import numpy as np
+def findnums(n,m,nums):
+    if(nums[n-1][m-1]>=0):
+        return nums[n-1][m-1]
+    elif(n==1):
+        q=findnums(n,m-1,nums)
+        nums[n-1][m-1]=q
+        
+    elif(m==1):
+        q=findnums(n-1,m,nums)
+        nums[n-1][m-1]=q          
+    else:
+        q=findnums(n,m-1,nums)+findnums(n-1,m,nums)
+        nums[n-1][m-1]=q
+    
+    return q
+
+
+
+
+class Solution(object):
+    def uniquePaths(self, m, n):
+        """
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        
+        if((m==1)and(n==1)):
+            return 1
+        else:
+            nums_matrix = [[-1 for i in range(m)] for j in range(n)]
+            nums_matrix[0][0]=1           
+            q=findnums(n,m,nums_matrix)
+            return q
