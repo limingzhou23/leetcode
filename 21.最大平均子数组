@@ -1,0 +1,62 @@
+我们将给定的数组 A 分成 K 个相邻的非空子数组 ，我们的分数由每个子数组内的平均值的总和构成。计算我们所能得到的最大分数是多少。
+注意我们必须使用 A 数组中的每一个数进行分组，并且分数不一定需要是整数。
+示例:
+输入: 
+A = [9,1,2,3,9]
+K = 3
+输出: 20
+解释: 
+A 的最优分组是[9], [1, 2, 3], [9]. 得到的分数是 9 + (1 + 2 + 3) / 3 + 9 = 20.
+我们也可以把 A 分成[9, 1], [2], [3, 9].
+这样的分组得到的分数为 5 + 2 + 6 = 13, 但不是最大值.
+
+说明:
+1 <= A.length <= 100.
+1 <= A[i] <= 10000.
+1 <= K <= A.length.
+答案误差在 10^-6 内被视为是正确的。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/largest-sum-of-averages
+
+解题思路:一个数组分割之后份数越多得到的平均值就越大。我们假设dp[i][k]表示为数组A【0~i】分割k份得到的最大平均值。
+         因为最后一个分割点可以出现在任何部分（实际上也得出现在大于k-1个位置之后），所以
+          dp[i][k]=max(dp[j][k-1]+sum(j~i)/(i-j)) 
+          其中j在j之前的地方j<i,因此可以把这个递推式理解为重新选择最后一个分割点的最大处
+
+知识点：1.子问题划分公式推导
+        2.函数内定义函数
+        3.数组的声明方式   [[0] for y in range(len(A)+1)] 
+
+
+
+
+
+python 实现：
+import numpy as np
+class Solution(object):
+    def largestSumOfAverages(self, A, K):
+        """
+        :type A: List[int]
+        :type K: int
+        :rtype: float
+        """
+        length=len(A)
+        
+        sums=[0]
+        for a in A:
+            sums.append(sums[-1]+a)
+        
+        def gap_sum(i,j):
+            return 1.0*(sums[j]-sums[i])
+        
+        dp=[[0] for y in range(len(A)+1)]  
+        
+        for i in range(1,len(A)+1):
+            dp[i][0]=gap_sum(0,i)/i
+            
+        for k in range(K-1):
+            for i in range(len(A),0,-1):
+                dp[i][0]=max([dp[j][0]+gap_sum(j,i)/(i-j) for j in range(i)])
+        
+        return dp[-1][0]
