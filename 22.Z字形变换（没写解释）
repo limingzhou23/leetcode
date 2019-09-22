@@ -11,6 +11,12 @@ E   D   H   N
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/zigzag-conversion
 
+解题思路：只要准备3个存储位置，将字符序号依次放入这三个存储位置，按照0，1，2，1，0，1，2......的顺序
+         然后按照序号将对应字符串组合即可
+     
+知识点：1.python创建多维数组
+       2.python 组合新的字符串
+    
 
 
 python实现
