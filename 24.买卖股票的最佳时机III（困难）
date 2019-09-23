@@ -43,3 +43,35 @@ class Solution(object):
                 dp[k][i]=max(dp[k][i-1],prices[i]+pre_max)
         return dp[-1][-1]
             
+            
+            
+ 变式：买卖次数为k
+ 注意：k过大时，问题简化为可以无限次买卖的问题
+            
+  python实现：
+  class Solution(object):
+    def maxProfit(self, k, prices):
+        """
+        :type k: int
+        :type prices: List[int]
+        :rtype: int
+        """
+        if not prices:return 0
+        if(k==0):return 0
+        
+        n=len(prices)
+        if(k<n//2):
+            dp=[[0]*n for _ in range(k+1)]
+        
+            for kk in range(1,k+1):
+                pre_max=-prices[0]
+                for i in range(1,n):
+                    pre_max=max(pre_max,dp[kk-1][i-1]-prices[i])
+                    dp[kk][i]=max(dp[kk][i-1],prices[i]+pre_max)
+            return dp[-1][-1]
+        else:
+            money=0
+            for i in range(n-1):
+                money+=max(0,prices[i+1]-prices[i])
+            return money
+            
