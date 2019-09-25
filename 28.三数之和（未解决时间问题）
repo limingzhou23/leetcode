@@ -1,0 +1,67 @@
+给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+
+例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/3sum
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+
+
+import numpy as np
+class Solution(object):
+    def threeSum(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        if(len(nums)<3):return []
+        used=0
+        threenum = []
+        length=max(5*(abs(max(nums))+abs(min(nums))),5*len(nums))
+        nums_index=np.zeros(len(nums),dtype=int)
+        
+        for k in range(0,len(nums)):
+            if(nums_index[k]>0):
+                continue
+            
+            target = -nums[k]
+            nums_index[k]=1
+
+            index = np.zeros(length, dtype=int)
+            flag  = np.zeros(length, dtype=int)
+
+            for i in range(len(nums)):
+                if(nums_index[i]!=1):
+                    index[target - nums[i]] += 1
+                    flag[target - nums[i]] = 1
+  
+            for j in range(len(nums)):
+                if(nums_index[j]!=1):
+                    eqal1=((flag[nums[j]] == 1)and(nums[j]==target-nums[j])and(index[nums[j]]>=2))
+                    eqal2 = ((flag[nums[j]] == 1)and(nums[j] != target - nums[j]) and (index[nums[j]] >0))
+                    if (eqal1 or eqal2):
+                        threenum.append([nums[k], nums[j], target - nums[j]])
+                        index[nums[j]]-=1
+                        flag[nums[j]] = 0
+                        flag[target - nums[j]] = 0
+                        used=1
+
+            if(used):
+                for i in range(len(nums)):
+                    if(nums[i]==nums[k]):
+                        nums_index[i]=1
+            else:
+                nums_index[k]=0
+                        
+                                    
+        return threenum
+    
