@@ -1,0 +1,62 @@
+给定一个包含非负整数的数组，你的任务是统计其中可以组成三角形三条边的三元组个数。
+示例 1:
+
+输入: [2,2,3,4]
+输出: 3
+解释:
+有效的组合是: 
+2,3,4 (使用第一个 2)
+2,3,4 (使用第二个 2)
+2,2,3
+注意:
+
+数组长度不超过1000。
+数组里整数的范围为 [0, 1000]。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/valid-triangle-number
+
+题目分析：构成三角形的判定条件就是两条较短的边长之和大于最长的边长 只要根据此判断条件进行筛选
+解题思路：首先对序列Vec进行排序  从最后取出的就是最长边的大小
+         固定一个最长边 使用双指针法 对L=0 R=n-1(n为选定的最长边的下标）
+         如果Vec[L]+Vec[R]>Vec[n] 说明L,R,n可以构成三角形 由于L到R之间的元素都比L大 因此以n,R为两个边长的三角形共有R-L个
+                                  此时 因为L,R够大，所以下一个检索L和R-1,之后同理
+         如果Vec[L]+Vec[R]<Vec[n]   则选择L+1和R进行操作 之后同理
+            完成后 以Vec[n]为最长边的三角形个数就已经得到
+            对序列降序遍历，直到Vec[2].(至少要三个元素） 就可以得到所有三角形个数
+题目思考：本题主要要学会基于双指针的双重枚举法           
+
+C++code:
+#include<iostream>
+#include<vector>
+
+
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+    sort(nums.begin(),nums.end());  
+    int flag=0;
+    if(nums.size()<3||nums.size()>100000)
+    {
+        return 0;
+    }
+    else{
+        for (int maxline_index = nums.size() - 1; maxline_index > 1; maxline_index--) {
+            int first_index=0;
+            int second_index=maxline_index-1;
+            while(first_index < second_index)
+            {
+                if(nums[first_index]+nums[second_index]>nums[maxline_index]){
+                    flag+=second_index-first_index;
+                    second_index-=1;
+                }else{
+                    first_index+=1;
+                }
+
+            }
+        }
+    }
+    return flag;
+        
+    }
+};
