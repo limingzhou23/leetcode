@@ -1,0 +1,61 @@
+给定一个未排序的整数数组，找到最长递增子序列的个数。
+示例 1:
+输入: [1,3,5,4,7]
+输出: 2
+解释: 有两个最长递增子序列，分别是 [1, 3, 4, 7] 和[1, 3, 5, 7]。
+示例 2:
+输入: [2,2,2,2,2]
+输出: 5
+解释: 最长递增子序列的长度是1，并且存在5个子序列的长度为1，因此输出5。
+注意: 给定的数组长度不超过 2000 并且结果一定是32位有符号整数。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/number-of-longest-increasing-subsequence
+
+知识点：动态规划 记录以每个数字结尾的最长子序列的长度和此长度的个数进行规划
+                对后续的数字 如果大于前面的某个数 就可以添加做后缀 此时 1.若前面那个数的子序列长度大于这个数字 证明这就是所找的最长上升子序列（可能后续又被维护掉）则这个数可以直接添加 该数长度等于前面那个数的长度+1  个数相同
+                                                                    2.若前面那个数的子序列长度+1等于这个数 证明这个数是另一种子序列的方法 因此将个数添加到这个数的个数中
+               遍历长度数组 将最长的数的个数累加即可
+
+C++代码：
+#include<iostream>
+#include<vector>
+class Solution {
+public:
+    int findNumberOfLIS(vector<int>& nums) {
+        int length=nums.size();
+        if(length<2){return length;}
+        
+        vector<int> dp(length,0);
+        vector<int> counts(length,1);
+        
+        for(int i=0;i<length;i++){
+            for(int j=0;j<i;j++){
+                if(nums[j]<nums[i]){
+                    if(dp[j]>=dp[i]){
+                        dp[i]=dp[j]+1;
+                        counts[i]=counts[j];
+                    }else if(dp[j]+1==dp[i]){
+                        counts[i]+=counts[j];}   
+                    }
+                }
+            }
+        int maxnum=0;
+        int longestnum=0;
+        
+        for(int i=0;i<length;i++)
+        {
+            maxnum=max(maxnum,dp[i]);
+        }
+        
+        for(int i=0;i<length;i++)
+        {
+        if(dp[i]==maxnum){
+        longestnum+=counts[i];
+        }
+    
+        }
+        return longestnum;    
+        
+    }
+};
