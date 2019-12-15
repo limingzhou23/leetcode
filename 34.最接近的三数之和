@@ -1,0 +1,47 @@
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+
+例如，给定数组 nums = [-1，2，1，-4], 和 target = 1.
+
+与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/3sum-closest
+
+思路：排序+双指针
+     对每个数nums[i] 设置两个指针 left right 在i之后部分的首位 计算三数之和 大于目标值则右侧缩回 小于目标值则左侧增加
+                     维护对于每个nuns[i]的最接近目标值的三数之和 最后得到答案
+知识点：双指针的使用
+
+C++代码：
+#include<iostream>
+#include<vector>
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        int length=nums.size();
+        if(length<3){return 0;}
+        sort(nums.begin(),nums.end());
+        
+        int ans=nums[0]+nums[1]+nums[2];
+        for(int i=0;i<length-2;i++){
+            int left=i+1;
+            int right=length-1;
+            
+            while(left<right){
+                int sum=nums[i]+nums[left]+nums[right];
+                if(abs(sum-target)<abs(ans-target)){
+                    ans=sum;
+                }
+                if(sum>target){
+                    right--;
+                }else if(sum<target){
+                    left++;
+                }else{
+                    return ans;
+                }
+                
+            }
+        }
+        return ans;
+    }
+};
