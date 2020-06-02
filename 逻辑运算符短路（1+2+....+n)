@@ -1,0 +1,47 @@
+求 1+2+...+n ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C)
+
+法1： 使用逻辑运算符的短路特性  a and b 语句如果a==0 则直接结束该语句
+      使用这句话进行递归    n > 1 and self.sumNums(n - 1)   反复进入sumNums函数 直到最后一次递归 
+                                                           n=1 此时左侧为0 逻辑运算不进入 self.sumNums(n - 1) 执行self.res+=1 返回sunNums(1)=1
+                                                           向上递归 sumNums（2）  执行slef.res+=2.....
+                                                           直到sumNums(n) 执行self.res+=n  完成1到n的累加
+      要点：：需要设置一个对象的属性 以免在反复递归中不断重设变量 相当于设置一个全局变量
+class Solution(object):
+    def __init__(self):
+        self.res = 0
+        
+    def sumNums(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        n > 1 and self.sumNums(n - 1)
+        self.res += n
+        return self.res
+        
+      简洁写法：
+      return n != 0 and n + self.sumNums(n - 1)
+      问题：为什么返回的不是布尔值？
+      python 的返回值特性：
+               and表达式
+               # 所有条件都为真，返回最后一个值
+               # 检测所有表达式，直到遇到假为止，并返回假
+               # 遇到真，继续后面的判断，直到遇到假为止，如果遇见假直接返回，不再继续判断
+
+
+法2：
+from functools import reduce
+class Solution:
+    def sumNums(self, n: int) -> int:
+        return reduce(lambda x, y: x+y, [i for i in range(1,n+1)])
+高级函数解法：reduce函数 
+             输入两个参数 前一个是函数描述 后面是一个序列 
+             这里使用匿名函数lambda来设置函数 不需要def
+             
+             
+匿名函数lambda：是指一类无需定义标识符（函数名）的函数或子程序。
+lambda 函数可以接收任意多个参数 (包括可选参数) 并且返回单个表达式的值。
+要点：
+1，lambda 函数不能包含命令，
+2，包含的表达式不能超过一个。
+
