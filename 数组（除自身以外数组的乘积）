@@ -1,0 +1,41 @@
+给你一个长度为 n 的整数数组 nums，其中 n > 1，返回输出数组 output ，其中 output[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。
+示例:
+输入: [1,2,3,4]
+输出: [24,12,8,6]
+ 
+提示：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。
+说明: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。
+进阶：
+你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。）
+
+思路：1.暴力法 用除法 累乘之后除去每个位置的元素值
+      2.双向乘积累计   左数组记录该元素左侧所有元素相乘
+                      右数组记录该元素右侧所有元素相乘
+                      左右数组相乘即可                  时间O(N) 
+                                                       空间非线性
+      3.优化双数组：使用一个数组作为输出数组  一个值记录右侧累乘
+       空间可以线性
+
+
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        #暴力法
+        # anslist=[]
+        # allout=1
+        # for i in range(0,len(nums)):
+        #     allout=allout*nums[i]
+        # for i in range(0,len(nums)):
+        #     anslist.append(allout//nums[i])
+        # return anslist
+        
+        leftlist=[1]*len(nums)
+        rightlist=[1]*len(nums)
+        anslist=[1]*len(nums)
+        for i in range(1,len(nums)):
+            leftlist[i]=leftlist[i-1]*nums[i-1]
+        for i in range(len(nums)-2,-1,-1):
+            rightlist[i]=rightlist[i+1]*nums[i+1]
+        for i in range(0,len(nums)):
+            anslist[i]=leftlist[i]*rightlist[i]
+            
+        return anslist
