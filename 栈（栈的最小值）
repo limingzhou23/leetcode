@@ -1,0 +1,73 @@
+请设计一个栈，除了常规栈支持的pop与push函数以外，还支持min函数，该函数返回栈元素中的最小值。执行push、pop和min操作的时间复杂度必须为O(1)。
+示例：
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.getMin();   --> 返回 -2.
+
+解题思路
+使用一个主栈模拟入栈出栈的操作，然而，为了使 getMin 函数实现 O(1) 的时间复杂度，我们可以使用另一个栈来实现。
+我们可以将这个栈称为最小栈，每当入栈的数小于等于栈顶元素时，随主栈都进行一次 push 操作；
+当出栈的数与最小栈的栈顶元素相等时，最小栈也随主栈进行一次 pop 操作
+
+
+class MinStack(object):
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.stack=[]
+        self.Top=-1
+        self.min=0
+        self.lastmin=0
+        
+
+
+    def IsEmpty(self):
+        return self.Top==-1
+
+
+    def push(self, x):
+        """
+        :type x: int
+        :rtype: None
+        """
+        self.Top+=1
+        self.stack.append(x)
+        if(self.Top==-1)or(self.min>x):
+            self.lastmin=self.min
+            self.min=x       
+            
+
+
+    def pop(self):
+        """
+        :rtype: None
+        """
+        if(self.IsEmpty()):return False
+        else:
+            self.Top=self.Top-1
+            popnum=self.stack.pop()
+            if(popnum==self.min):
+                self.min=self.lastmin
+            return popnum
+
+
+    def top(self):
+        """
+        :rtype: int
+        """
+        return self.stack[self.Top]
+
+
+    def getMin(self):
+        """
+        :rtype: int
+        """
+        return self.min
+
