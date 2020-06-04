@@ -1,0 +1,32 @@
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。 
+
+示例:
+输入: [0,1,0,2,1,0,1,3,2,1,2,1]
+输出: 6
+
+思路：单调栈
+     python的list本身就是栈
+     
+     简单来说就是当前柱子如果小于等于栈顶元素，说明形不成凹槽，则将当前柱子入栈；
+     反之若当前柱子大于栈顶元素，说明形成了凹槽，于是将栈中小于当前柱子的元素pop出来，将凹槽的大小累加到结果中。
+
+class Solution(object):
+    def trap(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        res = 0
+        S = []
+        for i in range(0,len(height)):
+            while((len(S)!=0)and (height[S[-1]]<height[i])):
+                bottomindex=S.pop()
+                while((len(S)!=0)and (height[bottomindex]==height[S[-1]])):
+                    S.pop()
+                if len(S)!=0:
+                    res += (min(height[S[-1]], height[i]) - height[bottomindex]) * (i - S[-1] - 1)
+
+            S.append(i)
+        return res
