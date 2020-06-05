@@ -1,0 +1,50 @@
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+示例 1：
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+
+思路一：利用python的zip函数和列表拷贝特性
+zip()用法
+a = [1,2,3]  b = [4,5,6] c = [4,5,6,7,8]
+zipped = zip(a,b)     # 打包为元组的列表   [(1, 4), (2, 5), (3, 6)]
+zip(a,c)              # 元素个数与最短的列表一致 [(1, 4), (2, 5), (3, 6)]
+zip(*zipped)          # 与 zip 相反，*zipped 可理解为解压，返回二维矩阵式   [(1, 2, 3), (4, 5, 6)]
+
+list拷贝：list[::-1] 所有元素倒序拷贝
+
+利用zip的性质 不断弹出matrix[0]后旋转数组 zip将矩阵纵向重组 使用反向拷贝 即可完成顺时针旋转90°
+代码：
+def spiralOrder(matrix):
+    res=[]
+    while(matrix):
+        res+=matrix.pop(0)
+        matrix = list(zip(*matrix))[::-1]
+    return res
+    
+    
+思路二：模拟方法
+可以将矩阵看成若干层，首先打印最外层的元素，其次打印次外层的元素，直到打印最内层的元素。
+定义矩阵的第 k 层是到最近边界距离为 k 的所有顶点。
+例如，下图矩阵最外层元素都是第 1层，次外层元素都是第 2 层，剩下的元素都是第 3 层。
+
+    
+def spiralOrder(self, matrix):
+if not matrix or not matrix[0]:
+    return list()
+
+rows, columns = len(matrix), len(matrix[0])
+order = list()
+left, right, top, bottom = 0, columns - 1, 0, rows - 1
+
+while left <= right and top <= bottom:
+    for column in range(left, right + 1):
+        order.append(matrix[top][column])
+    for row in range(top + 1, bottom + 1):
+        order.append(matrix[row][right])
+    if left < right and top < bottom:
+        for column in range(right - 1, left, -1):
+            order.append(matrix[bottom][column])
+        for row in range(bottom, top, -1):
+            order.append(matrix[row][left])
+    left, right, top, bottom = left + 1, right - 1, top + 1, bottom - 1
+return order
