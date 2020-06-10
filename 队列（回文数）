@@ -26,3 +26,25 @@
                 stillEqual = False
 
         return stillEqual
+        
+    
+思路二：数学法
+       反转整数的后一半 判断与前一半是否相同
+       利用取余和整除来操作
+        
+        
+        
+            def isPalindrome(self, x):
+        """
+        :type x: int
+        :rtype: bool
+        """
+        if x<0 or (x%10 == 0 and x !=0):
+            return False
+
+        reversenum=0
+        while x>reversenum:
+            a=x%10
+            x=x//10
+            reversenum=reversenum*10+a
+        return x == reversenum or x== reversenum//10
