@@ -1,0 +1,37 @@
+根据每日 气温 列表，请重新生成一个列表，对应位置的输出是需要再等待多久温度才会升高超过该日的天数。
+如果之后都不会升高，请在该位置用 0 来代替。
+例如，给定一个列表 
+temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。
+提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。
+
+
+思路一：暴力求解
+
+def dailyTemperatures(T):
+    lenT=len(T)
+    ans=[]
+    for i in range(0,lenT):
+        ans.append(0)
+        for j in range(i+1,lenT):
+            if T[j] > T[i]:
+                ans[-1] = j -i
+                break
+    return ans
+
+temperatures = [89,62,70,58,47,47,46,76,100,70]
+
+思路二：单调栈
+      将下表依次压入栈中 每次取到一个新的温度 对比栈顶元素 如果大于栈顶 就弹出 反复直到栈顶元素比新温度高
+      每次弹出元素时将其等待天数维护进去
+def dailyTemperatures(T):
+    length = len(T)
+    stack = []
+    ans = [0]*length
+    for i in range(length):
+        tem=T[i]
+        while stack and tem > T[stack[-1]]:
+            prev_index = stack.pop()
+            ans[prev_index] = i - prev_index
+        stack.append(i)
+        print(stack)
+    return ans
