@@ -1,0 +1,46 @@
+N*N棋盘上摆放N个皇后
+
+回溯算法
+
+
+
+
+
+class Solution(object):
+    def __init__(self):
+        self.ans = []
+
+    def Nqueens(self, queenlist, line, queennum):
+        if line == queennum:
+            temp = []
+            for i in range(queennum):
+                thisline = ''
+                for j in range(queennum):
+                    if [i, j] in queenlist:
+                        thisline += 'Q'
+                    else:
+                        thisline += '+'
+                temp.append(thisline)
+            self.ans.append(temp)
+
+        else:
+            for i in range(queennum):
+                is_in = 0
+                for queen in queenlist:
+                    if i == queen[1] or abs(line - queen[0]) == abs(i - queen[1]):
+                        is_in = 1
+
+                if queenlist == [] or is_in == 0:
+                    queenlist.append([line, i])
+                    self.Nqueens(queenlist, line + 1, queennum)
+                    queenlist.pop(-1)
+
+    def solveNQueens(self, n):
+        """
+        :type n: int
+        :rtype: List[List[str]]
+        """
+        queenlist = []
+        line = 0
+        self.Nqueens(queenlist, line, n)
+        return self.ans
